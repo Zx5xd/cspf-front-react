@@ -9,12 +9,10 @@ import {setCookie} from "@/util/cookie.ts";
 
 export const ExpertHome = () => {
 
-  useEffect(() => {
-    axiosGet(`${migHost()}expert`).then((res)=>{
-      console.log('home', res?.data)
-      setCookie('profile',res?.data)
-    })
-  }, []);
+  // useEffect(() => {
+  //   axiosGet(`${migHost()}expert`).then((res)=>{
+  //   })
+  // }, []);
 
   return (
     <div className={'home-wrapper'}>

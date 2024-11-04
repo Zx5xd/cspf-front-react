@@ -8,6 +8,7 @@ import {fetchUrl} from "../../util/fetchData";
 import {urlProp, AniInfoProps, ForumItemProps, BoardItemProps, CommentProps} from './PropInterface';
 import {convertToKoreanTime} from "../../util/convertDate.ts";
 import {axiosPost} from "../../util/axiosData.ts";
+import useEnterKey from "@/hooks/useEnterKey.ts";
 
 const SendUrl: React.FC<urlProp> = ({url}) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -167,7 +168,7 @@ export const QuesBoardItem: React.FC<BoardItemProps> = ({
                                                               id, authorCode, title, content, createdAt,  open, handleGetInfo, handleSave, handleInputChange, comments, commentModifyAndDelete, handleUpdateBaord
                                                           }) => {
 
-
+    const { handleKeyDown } =useEnterKey(() => {handleSave(id)})
 
     return (<div key={id} className="forum-item" style={{width:'100%'}}>
         <Row>
@@ -203,6 +204,7 @@ export const QuesBoardItem: React.FC<BoardItemProps> = ({
                             name={'content'}
                             rows={3}
                             onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
                             placeholder="답변해주세요!"
                         />
                         <Form.Control
@@ -230,6 +232,7 @@ export const CommentItem: React.FC<CommentProps> = ({
     const commentUpdate = () => {
         setOpen(!open);
     }
+    const {handleKeyDown} = useEnterKey(() => commentModifyAndDelete(id, "Modify"))
 
     return (
         <section className="mb-1">
@@ -296,6 +299,7 @@ export const CommentItem: React.FC<CommentProps> = ({
                                             name={'contentModify'}
                                             rows={3}
                                             onChange={handleInputChange}
+                                            onKeyDown={handleKeyDown}
                                             placeholder="답변해주세요!"
                                         />
                                         <Form.Control

@@ -23,6 +23,8 @@ const useWebSocket = (
             withCredentials: true,
         });
 
+        console.log('chat wsRef.current', wsRef.current);
+
         wsRef.current.on("message", (message: any) => {
 
             console.log(`wsRef message :`);
@@ -31,7 +33,7 @@ const useWebSocket = (
             const msg: MessageProp = {
                 message: message.message,
                 sender: message.sender,
-                direction: "incoming",
+                // direction: "incoming",
             };
             onMessage(msg);
         });
@@ -42,10 +44,11 @@ const useWebSocket = (
 
             const imageInfo= JSON.parse(image)
             console.log(imageInfo.userCode)
+            console.log(imageInfo.images[0])
             // console.log(image.userCode, image.images)
             const msg: MessageProp = {
-                sender: imageInfo.sender,
-                direction: "incoming",
+                sender: imageInfo.userCode,
+                // direction: "incoming",
                 src: imageInfo.images[0]
             }
             onMessage(msg)

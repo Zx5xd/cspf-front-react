@@ -8,7 +8,6 @@ import {SearchNewsList} from "./components/search/SearchNewsList.tsx";
 import {SearchLawList} from "./components/search/SearchLawList.tsx";
 import {SearchAniInfo} from "./components/search/SearchAniInfo.tsx";
 import Itt from "./components/ITTComponent.tsx";
-import VoiceChat from "./VoiceChat.tsx";
 import GoogleLoginCallback from './components/SSO/GoogleLoginCallback.tsx';
 import { AdminLogin } from './pages/admin/AdminLogin.tsx';
 import { AdminHome } from './pages/admin/AdminHome.tsx';
@@ -26,7 +25,7 @@ import { CheckCert } from './pages/admin/CheckCert.tsx';
 import { ExpertMyPage } from './pages/expert/ExpertMyPage.tsx';
 import Email from './email.tsx';
 import {UserLogin} from "./pages/UserLogin.tsx";
-import {Chat} from "./components/chat/Chat.tsx";
+import Chat from "./components/chat/Chat.tsx";
 import {ChatComplaint} from "./pages/admin/ChatComplaint.tsx";
 
 export const AuthWrapper = ({children}:{children:React.Node}) =>{
@@ -73,7 +72,7 @@ const App: React.FC = () => {
                 <Route path="/searchNews" element={<SearchNewsList />} />
                 <Route path={"/chatcomp"} element={<ChatComplaint/>}/>
                 {/*<Route path="/voiceChat" element={<VoiceChat />} /> /!* VoiceChat 라우트 추가 *!/*/}
-                <Route path="/chat" element={<Chat />} />
+                <Route path="/chat" element={<Chat/>} />
                 <Route path="/caseLaw" element={<SearchLawList />} />
                 <Route path="/aniInfo" element={<SearchAniInfo />} />
                 <Route path="/email" element={<Email />} />

@@ -1,5 +1,6 @@
 import axios from "axios";
 import {getCookie, setCookie} from "./cookie.ts";
+import {migHost} from "@/util/apiInof.ts";
 
 
 export const axiosPost = async (url: string, data: any, option?: string) => {
@@ -53,4 +54,12 @@ export const axiosDelete = async (url: string) => {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const axiosUserInfo = async () => {
+    try{
+        return await axios.get(`${migHost()}user/profile`, {
+            withCredentials: true,
+        });
+    }catch (error) { console.log(error); }
 }

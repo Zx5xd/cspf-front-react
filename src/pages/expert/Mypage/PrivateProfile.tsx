@@ -1,12 +1,32 @@
 import {Card, Col, Dropdown, Form, Row} from "react-bootstrap";
-import React from "react";
-import {ExpertEntity, PrivateProfileProps} from "../../../components/user/props/ExpertProps.ts";
-import {getCookie} from "../../../util/cookie.ts";
+import React, {useEffect, useState} from "react";
+import {ExpertEntity, ExpertPublicEntity, PrivateProfileProps} from "../../../components/user/props/ExpertProps.ts";
+import {axiosGet, axiosUserInfo} from "@/util/axiosData.ts";
+import {migHost} from "@/util/apiInof.ts";
+import {useExpertInfo} from "@/hooks/useExpertInfo.ts";
 
 export const PrivateProfile:React.FC<PrivateProfileProps> = ({
     handleSetPassword, handleEdit, expertData
                                                              }) => {
-    const profile:ExpertEntity = getCookie('profile');
+    // const [profile, setProfile] = useState<ExpertEntity>();
+
+    // useEffect(() => {
+    //     console.log('privateProfile')
+    //     try{
+    //         axiosGet(`${migHost()}user/profile`).then((data)=>{
+    //             console.log(data)
+    //             setProfile(data.data);
+    //         })
+    //     } catch (e){
+    //         console.log(e)
+    //     }
+    //
+    // }, []);
+
+    const {profile} = useExpertInfo();
+
+    console.log('private',profile)
+
 
     return (
         <Card className="mt-4">
@@ -47,8 +67,7 @@ export const PrivateProfile:React.FC<PrivateProfileProps> = ({
                                 <Form.Control
                                     type="text"
                                     id="floatingPlaintextInput"
-                                    placeholder="wvw201016"
-                                    value={profile.username ?? expertData.username}
+                                    value={profile?.username}
                                     readOnly
                                     plaintext />
                                 <label htmlFor="floatingPlaintextInput">Id</label>
@@ -59,8 +78,7 @@ export const PrivateProfile:React.FC<PrivateProfileProps> = ({
                                 <Form.Control
                                     type="email"
                                     id="floatingPlaintextInput"
-                                    placeholder="wvw201016@naver.com"
-                                    value={profile.email ?? expertData.email}
+                                    value={profile?.email}
                                     readOnly
                                     plaintext />
                                 <label htmlFor="floatingPlaintextInput">Email</label>
@@ -73,8 +91,7 @@ export const PrivateProfile:React.FC<PrivateProfileProps> = ({
                                 <Form.Control
                                     type="password"
                                     id="floatingPlaintextInput"
-                                    placeholder="wvw201016"
-                                    value={profile.password ?? expertData.password}
+                                    value={profile?.password}
                                     readOnly
                                     plaintext />
                                 <label htmlFor="floatingPlaintextInput">Password</label>
@@ -86,7 +103,7 @@ export const PrivateProfile:React.FC<PrivateProfileProps> = ({
                                     type="text"
                                     id="floatingPlaintextInput"
                                     placeholder="010-1234-5678"
-                                    value={profile.phone??expertData.phone}
+                                    value={profile?.phone}
                                     readOnly
                                     plaintext />
                                 <label htmlFor="floatingPlaintextInput">Phone</label>

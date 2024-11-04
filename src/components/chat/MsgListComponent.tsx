@@ -1,7 +1,7 @@
 // MessageListComponent.tsx
 
 import React, {useEffect, useRef, useState} from "react";
-import {Message as ChatMessage, MessageImageContent} from "@chatscope/chat-ui-kit-react";
+// import {Message as ChatMessage, MessageImageContent} from "@chatscope/chat-ui-kit-react";
 import { MessageProp } from "./chatInterface.ts";
 
 interface MessageListProps {

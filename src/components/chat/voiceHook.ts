@@ -1,6 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
-import {io, Socket} from "socket.io-client";
-import {migHost} from "../../util/apiInof.ts";
+import { useEffect, useRef, useState } from 'react';
+import { io, Socket } from "socket.io-client";
+import { migHost } from "../../util/apiInof.ts";
 
 const configuration = {
     iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
@@ -10,78 +10,80 @@ const voiceHook = (roomId: string | undefined) => {
     const localStream = useRef<MediaStream | null>(null);
     const peerConnection = useRef<RTCPeerConnection | null>(null);
     const wsRef = useRef<Socket | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const [open, setOpen] = useState<boolean>(false);
+    const cspfDev = migHost();
 
-    const cspfDev = migHost()
-        // import.meta.env.VITE_DEV_CSPF_HOST;
+    const handleSignal = async (data: any) => {
+        console.log('Received signal:', data);
+        try {
+            if (data.signal && typeof data.signal === 'object') {
+                const { type, sdp, candidate } = data.signal;
+                if (type && sdp) {
+                    const remoteDescription = new RTCSessionDescription(data.signal);
+                    await peerConnection.current?.setRemoteDescription(remoteDescription);
 
-    // WebSocket 훅 사용
-   const handleSignal = async (data: any) => {
-       // console.log('Received signal:', data);
-
-       if (data.signal && typeof data.signal === 'object' && data.signal.type && data.signal.sdp) {
-           try {
-               const remoteDescription = new RTCSessionDescription(data.signal);
-               await peerConnection.current?.setRemoteDescription(remoteDescription);
-
-               if (data.signal.type === 'offer') {
-                   const answer = await peerConnection.current?.createAnswer();
-                   await peerConnection.current?.setLocalDescription(answer);
-                   wsRef.current?.emit('signal', {signal: answer, room: roomId+'_voice', from: wsRef.current.id});
-               }
-           } catch (error) {
-               console.error('Failed to set remote description:', error);
-           }
-       } else if (data.signal && data.signal.candidate) {
-           try {
-               await peerConnection.current?.addIceCandidate(new RTCIceCandidate(data.signal));
-           } catch (error) {
-               console.error('Error adding ICE candidate:', error);
-           }
-       } else {
-           console.error('Invalid signal data received:', data);
-       }
-   }
+                    if (type === 'offer') {
+                        const answer = await peerConnection.current?.createAnswer();
+                        await peerConnection.current?.setLocalDescription(answer);
+                        wsRef.current?.emit('signal', { signal: answer, room: `${roomId}_voiceRoom`, from: wsRef.current?.id });
+                    }
+                } else if (candidate) {
+                    await peerConnection.current?.addIceCandidate(new RTCIceCandidate(data.signal));
+                }
+            } else {
+                console.error('Invalid signal data received:', data);
+            }
+        } catch (error) {
+            console.error('Failed to handle signal:', error);
+        }
+    };
 
     useEffect(() => {
-
-        if(open){
+        if (open) {
+            console.log('open, ', open)
             wsRef.current = io(cspfDev, {
-                query: { roomId },
+                query: {roomId},
                 withCredentials: true,
             });
 
+            console.log('Voice wsRef.current', wsRef.current);
+            // wsRef.current?.emit('signal','signal 통신 확인')
             wsRef.current?.on('signal', handleSignal);
 
-            // 로컬 미디어 스트림 설정 및 WebRTC 연결 초기화
-            navigator.mediaDevices.getUserMedia({ audio: {
-                    sampleRate: 44100,       // 높은 샘플레이트 사용 (일반적으로 44.1kHz 또는 48kHz)
-                    channelCount: 1,         // 스테레오 설정 (일반적인 음성 통화는 1, 음악은 2)
-                    echoCancellation: true,  // 에코 제거 활성화
-                    noiseSuppression: true,  // 소음 제거 활성화
-                    autoGainControl: true    // 자동 이득 조절 활성화
-                } }).then(stream => {
+            navigator.mediaDevices.getUserMedia({
+                audio: {
+                    sampleRate: 44100,
+                    channelCount: 1,
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true,
+                },
+            }).then(stream => {
+                console.log('getUserMedia', stream);
                 localStream.current = stream;
                 peerConnection.current = new RTCPeerConnection(configuration);
                 stream.getTracks().forEach(track => peerConnection.current?.addTrack(track, stream));
 
-                peerConnection.current.onicecandidate = (event) => {
+                peerConnection.current.onicecandidate = event => {
                     if (event.candidate) {
-                        wsRef.current?.emit('signal', { signal: event.candidate, room: 'voice_chat_room', from: wsRef.current.id });
+                        wsRef.current?.emit('signal', { signal: event.candidate, room: `${roomId}_voiceRoom`, from: wsRef.current?.id });
                     }
                 };
 
-                peerConnection.current.ontrack = (event) => {
-                    const audioElement = document.createElement('audio');
-                    audioElement.srcObject = event.streams[0];
-                    audioElement.autoplay = true;
-                    document.body.appendChild(audioElement);
+                peerConnection.current.ontrack = event => {
+                    if (!audioRef.current) {
+                        audioRef.current = document.createElement('audio');
+                        audioRef.current.autoplay = true;
+                        document.body.appendChild(audioRef.current);
+                    }
+                    audioRef.current.srcObject = event.streams[0];
                 };
 
                 peerConnection.current.createOffer().then(offer => {
                     peerConnection.current?.setLocalDescription(offer);
-                    wsRef.current?.emit('signal', { signal: offer, room: 'voice_chat_room', from: wsRef.current.id });
+                    wsRef.current?.emit('signal', { signal: offer, room: `${roomId}_voiceRoom`, from: wsRef.current?.id });
                 });
             }).catch(error => {
                 console.error('Error accessing media devices', error);
@@ -89,15 +91,15 @@ const voiceHook = (roomId: string | undefined) => {
         }
 
         return () => {
-            endVoice()
+            endVoice();
         };
-    }, [roomId, open]);
+    }, [open, roomId]);
 
-    const startVoice = (open:boolean) => {
-        setOpen(open)
-    }
+    const startVoice = () => {
+        setOpen(true);
+    };
 
-   const endVoice = () => {
+    const endVoice = () => {
         peerConnection.current?.close();
         peerConnection.current = null;
 
@@ -106,15 +108,18 @@ const voiceHook = (roomId: string | undefined) => {
             localStream.current = null;
         }
 
-        wsRef.current?.disconnect()
-       wsRef.current = null;
+        wsRef.current?.disconnect();
+        wsRef.current = null;
 
-        setOpen(!open)
-    }
+        if (audioRef.current) {
+            document.body.removeChild(audioRef.current);
+            audioRef.current = null;
+        }
 
-   return { endVoice, startVoice };
-}
+        setOpen(false);
+    };
 
-
+    return { startVoice, endVoice };
+};
 
 export default voiceHook;

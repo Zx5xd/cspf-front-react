@@ -1,9 +1,10 @@
 import {Button, Card, CardBody, Col, Dropdown, Form, Row} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import {ExpertEntity, ExpertPublicEntity, ExpertPublicFormProp} from "../../../components/user/props/ExpertProps.ts";
-import {axiosGet} from "../../../util/axiosData.ts";
+import {axiosGet, axiosUserInfo} from "../../../util/axiosData.ts";
 import {migHost} from "../../../util/apiInof.ts";
 import {getCookie} from "../../../util/cookie.ts";
+import {useExpertInfo, useUserInfo} from "@/hooks/useExpertInfo.ts";
 
 export const PublicProfile:React.FC<ExpertPublicFormProp> = ({
     handleSetDetailProfile,
@@ -12,13 +13,11 @@ export const PublicProfile:React.FC<ExpertPublicFormProp> = ({
     const [publicProfile, setPublicProfile] = useState<ExpertPublicEntity>();
 
     useEffect(() => {
-        if(!publicProfile){
-            const cookieProfile = getCookie('profile')
-            console.log(`cookieProfile `,cookieProfile)
-            setProfile(cookieProfile)
-            setPublicProfile(cookieProfile.profile);
-        }
-    }, [publicProfile]);
+        axiosGet(`${migHost()}expert`).then((data)=>{
+            setProfile(data.data);
+            setPublicProfile(data.data.profile)
+        })
+    }, []);
 
 
     return (
