@@ -7,7 +7,7 @@ import useFileUpload from "@/components/chat/useFileUpload.ts";
 interface ChatProps {
     roomChat: ChatRoom;
     userCode: string;
-    chatClose: boolean;
+    chatClose: () => void;
 }
 
 const Chat: React.FC<ChatProps> = ({ chatClose, userCode, roomChat   }) => {
@@ -30,6 +30,7 @@ const Chat: React.FC<ChatProps> = ({ chatClose, userCode, roomChat   }) => {
     return (
         <div className="flex items-center justify-center bg-gray-100">
             <ChatWindow
+                chatClose={chatClose}
                 messages={messages}
                 onSendMessage={handleSend}
                 onAttachClick={triggerFileSelect}

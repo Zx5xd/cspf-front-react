@@ -15,9 +15,12 @@ export interface ChatLogFilter {
 export interface ChatLog {
     chatLogId: number;
     chatRoomID: string,
-    user: JSON;
-    chatMessage: string;
+    user?: JSON;
+    expert?: JSON;
+    chatMessage?: string;
+    chatImageUrl?: string;
     createdAt: string;
+    type: 'USER' | 'EXPERT';
 }
 
 export interface MessageProp {

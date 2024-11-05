@@ -11,6 +11,7 @@ export const cspfHost = () => {
 }
 
 export const migHost = () => {
+    // return import.meta.env.VITE_LOCAL_HOST;
     return import.meta.env.VITE_DEV_MG_HOST;
     // return import.meta.env.VITE_CSPF_HOST;
 }

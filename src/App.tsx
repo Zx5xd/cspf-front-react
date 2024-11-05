@@ -1,14 +1,14 @@
 // src/App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SSOHome from './pages/SSOHome.tsx';
-import EmailBut from "./mainBut.tsx";
-import NaverLoginCallback from './components/SSO/NaverLoginCallback.tsx';
+import SSOHome from './test/SSOHome.tsx';
+import EmailBut from "./test/mainBut.tsx";
+import NaverLoginCallback from '@/test/SSO/NaverLoginCallback.tsx';
 import {SearchNewsList} from "./components/search/SearchNewsList.tsx";
 import {SearchLawList} from "./components/search/SearchLawList.tsx";
 import {SearchAniInfo} from "./components/search/SearchAniInfo.tsx";
 import Itt from "./components/ITTComponent.tsx";
-import GoogleLoginCallback from './components/SSO/GoogleLoginCallback.tsx';
+import GoogleLoginCallback from '@/test/SSO/GoogleLoginCallback.tsx';
 import { AdminLogin } from './pages/admin/AdminLogin.tsx';
 import { AdminHome } from './pages/admin/AdminHome.tsx';
 import { UserManage } from './pages/admin/UserManage.tsx';
@@ -23,8 +23,8 @@ import { Announcement } from './pages/public/Announcement.tsx';
 import { Questions } from './pages/public/Questions.tsx';
 import { CheckCert } from './pages/admin/CheckCert.tsx';
 import { ExpertMyPage } from './pages/expert/ExpertMyPage.tsx';
-import Email from './email.tsx';
-import {UserLogin} from "./pages/UserLogin.tsx";
+import Email from './test/email.tsx';
+import {UserLogin} from "./test/UserLogin.tsx";
 import Chat from "./components/chat/Chat.tsx";
 import {ChatComplaint} from "./pages/admin/ChatComplaint.tsx";
 

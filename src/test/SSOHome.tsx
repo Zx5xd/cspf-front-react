@@ -1,7 +1,7 @@
 // src/pages/SSOHome.tsx
 import React from 'react';
-import NaverLoginButton from '../components/SSO/NaverLoginButton.tsx';
-import GoogleLoginButton from "../components/SSO/GoogleLoginButton.tsx";
+import NaverLoginButton from '@/test/SSO/NaverLoginButton.tsx';
+import GoogleLoginButton from "@/test/SSO/GoogleLoginButton.tsx";
 
 const SSOHome: React.FC = () => {
     return (
