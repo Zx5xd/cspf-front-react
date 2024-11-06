@@ -9,9 +9,10 @@ import {urlProp, AniInfoProps, ForumItemProps, BoardItemProps, CommentProps} fro
 import {convertToKoreanTime} from "../../util/convertDate.ts";
 import {axiosPost} from "../../util/axiosData.ts";
 import useEnterKey from "@/hooks/useEnterKey.ts";
+import { LocalHost, migHost } from '@/util/apiInof.ts';
 
 const SendUrl: React.FC<urlProp> = ({url}) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+     
     console.log(`SendUrl: ${url}`);
     const [content, setContent] = useState<string>('');
     const [author, setAuthor] = useState<string>('');
@@ -20,8 +21,8 @@ const SendUrl: React.FC<urlProp> = ({url}) => {
         "url" : url
     }
 
-    const host = import.meta.env.VITE_LOCAL_HOST || 'localhost';
-    const hostUrl = host+"scrip/news";
+    // const host = import.meta.env.VITE_LOCAL_HOST || 'localhost';
+    const hostUrl = LocalHost()+"scrip/news";
     console.log('hostUrl', hostUrl);
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-// useWebSocket.ts
+// useRoomSocket.ts
 
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from "socket.io-client";
@@ -7,13 +7,12 @@ import {migHost} from "../../util/apiInof.ts";
 
 
 
-const useWebSocket = (
+const useRoomSocket = (
     roomId: string,
-    onMessage?: (message: MessageProp) => void
+    onMessage: (message: MessageProp) => void
 ) => {
     roomId ? roomId: roomId = 'd86dcdc3-6b63-4c90-894a-dc442eeca387'
     const wsRef = useRef<Socket | null>(null);
-    const [unread, setUnread] = useState<number>(0);
 
     const cspfDev = migHost()
         // import.meta.env.VITE_DEV_CSPF_HOST;
@@ -60,4 +59,4 @@ const useWebSocket = (
     return { sendMessage };
 };
 
-export default useWebSocket;
+export default useRoomSocket;

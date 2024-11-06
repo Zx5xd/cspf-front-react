@@ -7,6 +7,7 @@ import Chat from "../../../components/chat/Chat.tsx";
 import { migHost } from "../../../util/apiInof.ts";
 import { useChatRoom } from '@/hooks/useChatRoom.ts';
 import { ChatTimeToKoreanTime } from '@/util/convertDate.ts';
+import useWebSocket from '@/hooks/useWebSocket.ts';
 
 export const ChatManage: React.FC<ExpertChatManage> = ({ ChckToRequestChat }) => {
     const cspfDev = migHost();
@@ -16,6 +17,7 @@ export const ChatManage: React.FC<ExpertChatManage> = ({ ChckToRequestChat }) =>
     const [showChatModal, setShowChatModal] = useState(false);
     const [voiceState, setVoiceState] = useState(false);
     const { chatRooms, chatLastLogs } = useChatRoom();
+    const {resetUnreadCount, unreadCounts, setIsOpen} = useWebSocket()
 
     useEffect(() => {
         axiosGet(`${cspfDev}user/profile`).then((res) => {
@@ -27,15 +29,22 @@ export const ChatManage: React.FC<ExpertChatManage> = ({ ChckToRequestChat }) =>
                 });
             }
         });
-    }, []);
+    }, [chatLastLogs]);
+
+    useEffect(() => {
+
+    }, [unreadCounts]);
 
     const connectChat = (chatRoom: ChatRoom) => {
         setSelectedChatRoom(chatRoom);
+        resetUnreadCount(chatRoom.chatRoomID)
         setShowChatModal(true);
+        setIsOpen(true)
     };
 
     const closeChat = () => {
         setShowChatModal(false);
+        setIsOpen(false)
     };
 
     const toggleVoiceChat = () => {
@@ -51,6 +60,23 @@ export const ChatManage: React.FC<ExpertChatManage> = ({ ChckToRequestChat }) =>
 
         return log ? ChatTimeToKoreanTime(log.createdAt) : "-";
     };
+    
+    const getUnReadCount = (chatRoomID: string) => {
+
+        let  unReadCount = 0;
+
+        Object.entries(unreadCounts).map(([roomId, count]) => {
+            if(roomId === chatRoomID){
+                unReadCount = count
+            }
+        })
+
+        console.log('unReadCount ', unReadCount)
+
+        return unReadCount ?? 0
+    }
+
+
 
     return (
       <>
@@ -103,7 +129,7 @@ export const ChatManage: React.FC<ExpertChatManage> = ({ ChckToRequestChat }) =>
                         </Col>
                         <Col md={4} className="position-relative">
                             {chatRoom.chatRoom}
-                            <span className="badge text-bg-secondary position-absolute top-0 end-0">0</span>
+                            <span className="badge text-bg-secondary position-absolute top-0 end-0">{getUnReadCount(chatRoom.chatRoomID)}</span>
                         </Col>
                         <Col md={3}>{getLastDate(chatRoom.chatRoomID)}</Col>
                         <Col md={2}><Button onClick={() => connectChat(chatRoom)}>입장</Button></Col>
