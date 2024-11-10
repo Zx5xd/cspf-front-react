@@ -1,18 +1,19 @@
 import { Card, Col, Container, Nav, Row } from 'react-bootstrap';
 import { Link, Outlet } from 'react-router-dom';
 import '@/style/wrapper.css';
-import {useEffect, useState} from "react";
-import {ExpertEntity} from "../../components/user/props/ExpertProps.ts";
+import {useEffect} from "react";
 import {axiosGet} from "@/util/axiosData.ts";
 import {migHost} from "@/util/apiInof.ts";
 import {setCookie} from "@/util/cookie.ts";
+import { useExpertSettings } from '@/store/expertStore.ts';
 
 export const ExpertHome = () => {
-
-  // useEffect(() => {
-  //   axiosGet(`${migHost()}expert`).then((res)=>{
-  //   })
-  // }, []);
+  const expertSet = useExpertSettings();
+  useEffect(() => {
+    axiosGet(`${migHost()}expert`).then((res)=>{
+      expertSet(res.data)
+    })
+  }, []);
 
   return (
     <div className={'home-wrapper'}>

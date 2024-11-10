@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../style/wrapper.css';
 import {  EditPassModalProps } from '../../components/user/props/UserProps.ts';
-import { fetchData, putFetch } from '../../util/fetchData.ts';
 import {DetailProfileSetModal, EditPassModal, ExpertEditModal} from '../../components/user/Modal.tsx';
 import {PublicProfile} from "./Mypage/PublicProfile.tsx";
 import {PrivateProfile} from "./Mypage/PrivateProfile.tsx";
@@ -10,13 +9,15 @@ import {Booking} from "./Mypage/Booking.tsx";
 import {Availability} from "./Mypage/Availability.tsx";
 import {ExpertEntity, ExpertPublicEntity} from "../../components/user/props/ExpertProps.ts";
 import {migHost} from "../../util/apiInof.ts";
-import {axiosGet, axiosPatch} from "../../util/axiosData.ts";
-import {setCookie} from "../../util/cookie.ts";
+import {axiosPatch} from "../../util/axiosData.ts";
+import { useExpertSettings, useExpertInfo } from '@/store/expertStore.ts';
 
 export const ExpertMyPage: React.FC = () => {
 
-  // 마이페이지
-  const [users, setUsers] = useState<ExpertEntity>();
+  const users = useExpertInfo()
+  const setUsers = useExpertSettings()
+
+  console.log(`user profile ${users}`)
 
   // 계정 정보 수정
   const [showModal, setShowModal] = useState(false);
@@ -29,13 +30,6 @@ export const ExpertMyPage: React.FC = () => {
   // 전문가 추가 프로필
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [detailProfile, setDetailProfile] = useState<Partial<ExpertPublicEntity>>({});
-
-
-  useEffect(() => {
-    axiosGet(`${migHost()}expert`).then((user)=>{
-      setUsers(user?.data)
-    })
-  }, []);
 
   // 모달 닫기
   const handleClose = () => {
@@ -92,7 +86,6 @@ export const ExpertMyPage: React.FC = () => {
           if (res && res.status === 200) {
            users === res.data ? alert('업데이트 에러...') : (
                setUsers(res.data),
-               setCookie('profile',res.data),
                setShowModal(false)
            )
          }
@@ -129,12 +122,12 @@ export const ExpertMyPage: React.FC = () => {
         <div className="tab-pane fade show active" id="account" role="tabpanel">
           {/*공개프로필*/}
        <PublicProfile
-           expertData = {formData}
+          expertData = {users}
           expertPublicData = {detailProfile}
           handleSetDetailProfile={handleSetDetailProfile}/>
 {/*개인정보*/}
          <PrivateProfile
-         expertData = {formData}
+         expertData = {users}
          handleEdit = {handleEdit}
          handleSetPassword = {handleSetPassword}
          />

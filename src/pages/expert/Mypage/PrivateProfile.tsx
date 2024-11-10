@@ -1,32 +1,13 @@
 import {Card, Col, Dropdown, Form, Row} from "react-bootstrap";
-import React, {useEffect, useState} from "react";
-import {ExpertEntity, ExpertPublicEntity, PrivateProfileProps} from "../../../components/user/props/ExpertProps.ts";
-import {axiosGet, axiosUserInfo} from "@/util/axiosData.ts";
-import {migHost} from "@/util/apiInof.ts";
-import {useExpertInfo} from "@/hooks/useExpertInfo.ts";
+import React from "react";
+import {PrivateProfileProps} from "../../../components/user/props/ExpertProps.ts";
+import { useExpertInfo } from '@/store/expertStore.ts';
 
 export const PrivateProfile:React.FC<PrivateProfileProps> = ({
-    handleSetPassword, handleEdit, expertData
+    handleSetPassword, handleEdit
                                                              }) => {
-    // const [profile, setProfile] = useState<ExpertEntity>();
-
-    // useEffect(() => {
-    //     console.log('privateProfile')
-    //     try{
-    //         axiosGet(`${migHost()}user/profile`).then((data)=>{
-    //             console.log(data)
-    //             setProfile(data.data);
-    //         })
-    //     } catch (e){
-    //         console.log(e)
-    //     }
-    //
-    // }, []);
-
-    const {profile} = useExpertInfo();
-
-    console.log('private',profile)
-
+    const profile = useExpertInfo()
+    console.log(`profile ${profile}`)
 
     return (
         <Card className="mt-4">
