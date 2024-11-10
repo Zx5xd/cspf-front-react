@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserLoginForm } from '@/components/user/UserLoginForm.tsx';
-import {axiosPost} from "@/util/axiosData.ts";
+import { axiosLoagin, axiosLogin, axiosPost } from '@/util/axiosData.ts';
 import {migHost} from "@/util/apiInof.ts";
 
 export const ExpertLogin: React.FC = () => {
@@ -25,7 +25,7 @@ export const ExpertLogin: React.FC = () => {
     //   pars.success? navigate('/expert') : setErrorMessage(pars.message)
     //
     // });
-      axiosPost(`${cspfHost}auth/login/expert`, formData).then(data => {
+    axiosLogin(`${cspfHost}auth/login/expert`, formData).then(data => {
       console.log(data);
       data.status === 201? navigate('/expert') : setErrorMessage(data.data.message)
       });

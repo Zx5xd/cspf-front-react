@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchUrl } from '../util/fetchData.ts';
 import { UserLoginForm } from '../components/user/UserLoginForm.tsx';
 import {migHost} from "../util/apiInof.ts";
+import { axiosLogin } from '@/util/axiosData.ts';
 // import {getCookie, removeCookie, setCookie} from '../../util/cookie.ts';
 // import {useCookies} from "react-cookie";
 
@@ -25,13 +26,9 @@ export const UserLogin: React.FC = () => {
     const cspfHost = migHost();
     console.log(cspfHost);
 
-    await fetchUrl(cspfHost+'auth/login',
-                  JSON.stringify(formData)).
-    then(data => {
-       console.log(data);
-      // console.log(getCookie('authorization'));
-      navigate('/expert');
-    });
+    axiosLogin(`${cspfHost}auth/login`,formData).then(data => {
+      console.log(data);
+    })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

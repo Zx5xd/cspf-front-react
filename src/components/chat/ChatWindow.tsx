@@ -1,9 +1,9 @@
 import React, { useState} from "react";
-import MessageList from "./MessageList";
-import MessageInput from "./MessageInput";
+import MessageList from "@/components/chat/fragment/MessageList.tsx";
+import MessageInput from "@/components/chat/fragment/MessageInput.tsx";
 import { MessageProp } from "./chatInterface";
 import { PhoneIcon, PhoneXMarkIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import voiceHook from "@/components/chat/voiceHook.ts";
+import useVoiceHook from "@/hooks/useVoiceHook.ts"
 
 interface ChatWindowProps {
     chatClose: () => void;
@@ -25,9 +25,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                                                     roomId
                                                }) => {
     const [voiceState, setVoiceState] = useState(false)
-    const [page, setPage] = useState(1);
 
-    const {startVoice, endVoice} = voiceHook(roomId)
+    const {startVoice, endVoice} = useVoiceHook(roomId)
 
     const handleStartVoice = () => {
         console.log(roomId)
@@ -50,7 +49,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                 <XMarkIcon className="size-5 w-auto text-center text-blue-500" onClick={chatClose}/>
 
         </div>
-        <MessageList messages={messages} userCode={userCode} page={page} roomId={roomId} />
+        <MessageList messages={messages} userCode={userCode} roomId={roomId} />
         <MessageInput onSendMessage={onSendMessage} onAttachClick={onAttachClick} onImageUpload={onImageUpload} />
     </div>)
 };

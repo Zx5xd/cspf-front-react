@@ -2,13 +2,22 @@ import axios from "axios";
 import {getCookie, setCookie} from "./cookie.ts";
 import {migHost} from "@/util/apiInof.ts";
 
+export const axiosLogin = async (url: string, data: any, option?: string) => {
+  return await axios.post(url, data, {
+    headers:
+      {
+        'Content-Type': 'application/json',
+      },
+    withCredentials: true
+  });
+}
 
 export const axiosPost = async (url: string, data: any, option?: string) => {
    console.log('axiosPost',getCookie("authorization"));
     return await axios.post(url, data, {
        headers:
            {
-               'Content-Type': 'application/json'
+               'Content-Type': 'application/json',
            },
        withCredentials: true
    });

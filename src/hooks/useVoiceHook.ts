@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from "socket.io-client";
-import { migHost } from "../../util/apiInof.ts";
+import { migHost } from "../util/apiInof.ts";
 
 const configuration = {
     iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
 };
 
-const voiceHook = (roomId: string | undefined) => {
+const useVoiceHook = (roomId: string | undefined) => {
     const localStream = useRef<MediaStream | null>(null);
     const peerConnection = useRef<RTCPeerConnection | null>(null);
     const wsRef = useRef<Socket | null>(null);
@@ -122,4 +122,4 @@ const voiceHook = (roomId: string | undefined) => {
     return { startVoice, endVoice };
 };
 
-export default voiceHook;
+export default useVoiceHook;

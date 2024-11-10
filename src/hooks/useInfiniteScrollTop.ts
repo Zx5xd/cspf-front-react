@@ -1,49 +1,58 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
-const debounce = (func: (...any:any[]) => void, delay: number) => {
-    let timer: NodeJS.Timeout;
-    return (...args: any[]) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => func(...args), delay);
-    };
+const debounce = (func: (...args: any[]) => void, delay: number) => {
+  let timer: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => func(...args), delay);
+  };
 };
 
 export const useInfiniteScrollTop = (
   callback: (page: number) => void,
   scrollContainerRef: React.RefObject<HTMLElement>,
-  delay:number
+  initialLoadComplete: boolean,
+  totalPages: number
 ) => {
-    const [isFetching, setIsFetching] = useState(false);
-    const [page, setPage] = useState<number>(1);
+  const [isFetching, setIsFetching] = useState(false);
+  const [page, setPage] = useState<number>(2) // 첫 로드는 이미 완료했으므로 2부터 시작
+  const delay = 500
 
-    const handleScroll = useCallback(
-      debounce(() => {
-          if (scrollContainerRef.current && scrollContainerRef.current.scrollTop <= 5 && !isFetching) {
-              setIsFetching(true);
-          }
-      }, delay),
-      [isFetching, scrollContainerRef, delay]
-    );
+  const handleScroll = useCallback(
+    debounce(() => {
+      if (scrollContainerRef.current && scrollContainerRef.current.scrollTop <= 5 && !isFetching && initialLoadComplete) {
+        setIsFetching(true);
+      }
+    }, delay),
+    [isFetching, scrollContainerRef, delay, initialLoadComplete]
+  );
 
-    useEffect(() => {
-        const scrollContainer = scrollContainerRef.current;
+  useEffect(() => {
+    if(page > totalPages){
+      console.log(page, totalPages)
+      return () => {
+        console.log('The End')
+      }
+    } else{
+      const scrollContainer = scrollContainerRef.current;
+      if (scrollContainer) {
+        scrollContainer.addEventListener('scroll', handleScroll);
+      }
+      return () => {
         if (scrollContainer) {
-            scrollContainer.addEventListener('scroll', handleScroll);
+          scrollContainer.removeEventListener('scroll', handleScroll);
         }
-        return () => {
-            if (scrollContainer) {
-                scrollContainer.removeEventListener('scroll', handleScroll);
-            }
-        };
-    }, [handleScroll, scrollContainerRef]);
+      };
+    }
 
-    useEffect(() => {
+  }, [handleScroll, scrollContainerRef]);
 
-            if (!isFetching) return;
-            setPage(prevPage => prevPage + 1);
-            callback(page);
-            setIsFetching(false);
-    }, [isFetching, callback]);
+  useEffect(() => {
+    if (!isFetching || !initialLoadComplete) return;
+    callback(page);
+    setIsFetching(false);
+    setPage((prevPage) => prevPage + 1);
+  }, [isFetching, callback, initialLoadComplete]);
 
-    return { isFetching, page, setPage } as const;
+  return { isFetching, page, setPage } as const;
 };

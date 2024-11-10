@@ -13,7 +13,7 @@ export interface ChatLogFilter {
 }
 
 export interface ChatLog {
-    chatLogId: number;
+    chatLogID: string;
     chatRoomID: string,
     user?: JSON;
     expert?: JSON;

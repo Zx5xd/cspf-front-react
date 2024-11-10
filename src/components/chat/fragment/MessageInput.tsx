@@ -25,8 +25,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
     const { handleKeyDown } = useEnterKey(handleSendClick)
 
     return (
-        <div className="border-t border-gray-200 p-2 flex">
-            <PaperClipIcon className="m-2 pt-1 h-1/2 w-auto" onClick={onAttachClick}/>
+      <div className="border-t border-gray-200 p-2 flex">
+        <PaperClipIcon className="m-2 pt-1 h-1/2 w-auto" onClick={onAttachClick}/>
             <PhotoIcon className="m-2 pt-1 h-1/2 w-auto" onClick={onImageUpload} />
             {/*<button*/}
             {/*    onClick={onAttachClick}*/}

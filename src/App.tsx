@@ -7,7 +7,7 @@ import NaverLoginCallback from '@/test/SSO/NaverLoginCallback.tsx';
 import {SearchNewsList} from "./components/search/SearchNewsList.tsx";
 import {SearchLawList} from "./components/search/SearchLawList.tsx";
 import {SearchAniInfo} from "./components/search/SearchAniInfo.tsx";
-import Itt from "./components/ITTComponent.tsx";
+import Itt from "./test/ITTComponent.tsx";
 import GoogleLoginCallback from '@/test/SSO/GoogleLoginCallback.tsx';
 import { AdminLogin } from './pages/admin/AdminLogin.tsx';
 import { AdminHome } from './pages/admin/AdminHome.tsx';
@@ -28,11 +28,11 @@ import {UserLogin} from "./test/UserLogin.tsx";
 import Chat from "./components/chat/Chat.tsx";
 import {ChatComplaint} from "./pages/admin/ChatComplaint.tsx";
 
-export const AuthWrapper = ({children}:{children:React.Node}) =>{
-    //const  { } = useAuth()
-    //auth check
-    return {children}
-}
+// export const AuthWrapper = ({children}:{children:React.Node}) =>{
+//     //const  { } = useAuth()
+//     //auth check
+//     return {children}
+// }
 
 const App: React.FC = () => {
 

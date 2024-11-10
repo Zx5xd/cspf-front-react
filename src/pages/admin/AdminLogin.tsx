@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchUrl } from '../../util/fetchData.ts';
 import { UserLoginForm } from '../../components/user/UserLoginForm.tsx';
 import {migHost} from "../../util/apiInof.ts";
-import {axiosPost} from "../../util/axiosData.ts";
+import { axiosLoagin, axiosLogin, axiosPost } from '../../util/axiosData.ts';
+import { useChatComplain } from '@/hooks/useChatComplain.ts';
 // import {getCookie, removeCookie, setCookie} from '../../util/cookie.ts';
 // import {useCookies} from "react-cookie";
 
@@ -34,7 +35,7 @@ export const AdminLogin: React.FC = () => {
     //   navigate('/admin');
     // });
 
-    axiosPost(`${cspfHost}auth/login/admin`,formData).then(data => {
+    axiosLogin(`${cspfHost}auth/login/admin`,formData).then(data => {
       console.log(data);
       navigate('/admin')
     })

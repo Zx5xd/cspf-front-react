@@ -2,9 +2,8 @@ import { axiosGet } from '@/util/axiosData.ts';
 import { migHost } from '@/util/apiInof.ts';
 import { useEffect, useState } from 'react';
 import { ChatLog, ChatRoom } from '@/components/chat/chatInterface.ts';
-import { useChatLogList } from '@/components/chat/useChatLogList.ts';
 
-export const useChatRoom = () => {
+export const useChatRoomManage = () => {
 
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [chatLastLogs, setChatLastLogs] = useState<ChatLog[] | null>([]);
@@ -24,10 +23,14 @@ export const useChatRoom = () => {
       axiosGet(`${migHost()}chatLog`,{
         roomId: room.chatRoomID,
       }).then(async (data) => {
-        console.log(data)
-        const entriesData = Object.entries(data.data.results);
-        ls = data.data.results.length
-        setChatLastLogs(prevData => [...prevData, entriesData[ls - 1][1]])
+        if(data?.data.total > 0){
+          const entriesData = Object.entries(data?.data.results);
+          ls = data?.data.results.length
+          setChatLastLogs(prevData => [...prevData, entriesData[ls - 1][1]])
+        }
+        else{
+          setChatLastLogs(data?.data.results)
+        }
       })
     })
   }

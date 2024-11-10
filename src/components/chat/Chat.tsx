@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ChatWindow from "./ChatWindow";
-import { ChatRoom } from "./chatInterface";
-import useRoomSocket from "./useRoomSocket.ts";
-import useFileUpload from "@/components/chat/useFileUpload.ts";
+import ChatWindow from "@/components/chat/ChatWindow";
+import { ChatRoom } from "@/components/chat/chatInterface";
+import useRoomSocket from "@/hooks/useRoomSocket.ts";
+import useFileUpload from "@/hooks/useFileUpload.ts";
 
 interface ChatProps {
     roomChat: ChatRoom;
@@ -10,7 +10,7 @@ interface ChatProps {
     chatClose: () => void;
 }
 
-const Chat: React.FC<ChatProps> = ({ chatClose, userCode, roomChat   }) => {
+const Chat: React.FC<ChatProps> = ({ chatClose, userCode, roomChat }) => {
     const [messages, setMessages] = useState([]);
 
     const { sendMessage } = useRoomSocket(roomChat.chatRoomID, (msg) => {

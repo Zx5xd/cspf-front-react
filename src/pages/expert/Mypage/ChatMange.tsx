@@ -5,7 +5,7 @@ import { axiosGet } from "../../../util/axiosData.ts";
 import { ChatRoom } from "../../../components/chat/chatInterface.ts";
 import Chat from "../../../components/chat/Chat.tsx";
 import { migHost } from "../../../util/apiInof.ts";
-import { useChatRoom } from '@/hooks/useChatRoom.ts';
+import { useChatRoomManage } from '@/hooks/useChatRoomManage.ts';
 import { ChatTimeToKoreanTime } from '@/util/convertDate.ts';
 import useWebSocket from '@/hooks/useWebSocket.ts';
 
@@ -16,7 +16,7 @@ export const ChatManage: React.FC<ExpertChatManage> = ({ ChckToRequestChat }) =>
     const [selectedChatRoom, setSelectedChatRoom] = useState<ChatRoom | null>(null);
     const [showChatModal, setShowChatModal] = useState(false);
     const [voiceState, setVoiceState] = useState(false);
-    const { chatRooms, chatLastLogs } = useChatRoom();
+    const { chatRooms, chatLastLogs } = useChatRoomManage();
     const {resetUnreadCount, unreadCounts, setIsOpen} = useWebSocket()
 
     useEffect(() => {

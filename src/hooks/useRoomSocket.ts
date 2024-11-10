@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from "socket.io-client";
-import { MessageProp } from "./chatInterface.ts";
-import {migHost} from "../../util/apiInof.ts";
+import { MessageProp } from "@/components/chat/chatInterface.ts";
+import {migHost} from "@/util/apiInof.ts";
+import { getCookie } from '@/util/cookie.ts';
+import { authorize } from 'passport';
 
 
 
@@ -17,10 +19,12 @@ const useRoomSocket = (
     const cspfDev = migHost()
         // import.meta.env.VITE_DEV_CSPF_HOST;
 
+
     useEffect(() => {
         wsRef.current = io(cspfDev, {
+            // auth: {authorization: `Bearer ${getCookie('authorization')}`},
             query: { roomId },
-            withCredentials: true,
+            withCredentials: true
         });
 
         console.log('chat wsRef.current', wsRef.current);

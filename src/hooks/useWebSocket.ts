@@ -14,6 +14,7 @@ const useWebSocket = () => {
       wsRef.current = io(migHost(),{withCredentials:true})
       console.log('useWebSocket')
       // 모든 채팅방의 새 메시지 수신
+
       wsRef.current.on('newMessage', (message) => {
         const { roomId } = message;
         console.log('newMessage ', roomId);
