@@ -1,66 +1,61 @@
 // useRoomSocket.ts
 
-import { useEffect, useRef, useState } from 'react';
-import { io, Socket } from "socket.io-client";
-import { MessageProp } from "@/components/chat/chatInterface.ts";
-import {migHost} from "@/util/apiInof.ts";
-import { getCookie } from '@/util/cookie.ts';
-import { authorize } from 'passport';
-
-
+import { useEffect, useRef, useState } from 'react'
+import { io, Socket } from 'socket.io-client'
+import { MessageProp } from '@/components/chat/chatInterface.ts'
+import { migHost } from '@/util/apiInof.ts'
+import { getCookie } from '@/util/cookie.ts'
+import { authorize } from 'passport'
 
 const useRoomSocket = (
-    roomId: string,
-    onMessage: (message: MessageProp) => void
+  roomId: string,
+  onMessage: (message: MessageProp) => void
 ) => {
-    roomId ? roomId: roomId = 'd86dcdc3-6b63-4c90-894a-dc442eeca387'
-    const wsRef = useRef<Socket | null>(null);
+  roomId ? roomId : (roomId = 'd86dcdc3-6b63-4c90-894a-dc442eeca387')
+  const wsRef = useRef<Socket | null>(null)
 
-    const cspfDev = migHost()
-        // import.meta.env.VITE_DEV_CSPF_HOST;
+  const cspfDev = migHost()
+  // import.meta.env.VITE_DEV_CSPF_HOST;
 
+  useEffect(() => {
+    wsRef.current = io(cspfDev, {
+      // auth: {authorization: `Bearer ${getCookie('authorization')}`},
+      query: { roomId },
+      withCredentials: true,
+    })
 
-    useEffect(() => {
-        wsRef.current = io(cspfDev, {
-            // auth: {authorization: `Bearer ${getCookie('authorization')}`},
-            query: { roomId },
-            withCredentials: true
-        });
+    console.log('chat wsRef.current', wsRef.current)
 
-        console.log('chat wsRef.current', wsRef.current);
+    wsRef.current.on('message', (message: any) => {
+      const msg: MessageProp = {
+        message: message.message,
+        sender: message.sender,
+        // direction: "incoming",
+      }
+      onMessage(msg)
+    })
 
-        wsRef.current.on("message", (message: any) => {
-            const msg: MessageProp = {
-                message: message.message,
-                sender: message.sender,
-                // direction: "incoming",
-            };
-            onMessage(msg);
-        });
+    wsRef.current.on('image', (image: any) => {
+      const imageInfo = JSON.parse(image)
+      // console.log(image.userCode, image.images)
+      const msg: MessageProp = {
+        sender: imageInfo.userCode,
+        // direction: "incoming",
+        src: imageInfo.images[0],
+      }
+      onMessage(msg)
+    })
 
-        wsRef.current.on("image", (image: any)=> {
+    return () => {
+      wsRef.current?.disconnect()
+    }
+  }, [roomId, onMessage])
 
-            const imageInfo= JSON.parse(image)
-            // console.log(image.userCode, image.images)
-            const msg: MessageProp = {
-                sender: imageInfo.userCode,
-                // direction: "incoming",
-                src: imageInfo.images[0]
-            }
-            onMessage(msg)
-        })
+  const sendMessage = (message: string) => {
+    wsRef.current?.emit('message', message)
+  }
 
-        return () => {
-            wsRef.current?.disconnect();
-        };
-    }, [roomId, onMessage]);
+  return { sendMessage }
+}
 
-    const sendMessage = (message: string) => {
-        wsRef.current?.emit("message", message);
-    };
-
-
-    return { sendMessage };
-};
-
-export default useRoomSocket;
+export default useRoomSocket

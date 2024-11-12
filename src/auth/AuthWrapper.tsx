@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useAuthStore } from '@/store/useAuthStore.ts'
-import { useClearExpert } from '@/store/expertStore.ts'
+import { useClearExpert } from '@/store/useExpertStore.ts'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { migHost } from '@/util/apiInof.ts'
@@ -16,7 +16,7 @@ export const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
   //auth check
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log(isAuthenticated, type)
+      // console.log(isAuthenticated, type)
       // type이 없는 경우 현재 URL에서 원하는 부분을 사용하거나, 기본 경로로 설정 가능
       navigate(redirectPath)
     }
@@ -34,11 +34,8 @@ export const AuthWrapper = ({ children }: { children: React.ReactNode }) => {
       .get(`${migHost()}auth`, {
         withCredentials: true,
       })
-      .then((data) => {
-        console.log(data)
-      })
       .catch((error) => {
-        console.log(isAuthenticated, error)
+        // console.log(isAuthenticated, error)
         removeCookie('authorization')
         removeCookie('refreshToken')
         window.location.href = `/login/${type}`

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { z } from 'zod'
-import { useExpertStore } from '@/store/expertStore.ts'
+import { useExpertStore } from '@/store/useExpertStore.ts'
 
 // Zod를 사용해 토큰 검증 스키마 정의
 const TypeSchema = z.enum(['expert', 'admin'])

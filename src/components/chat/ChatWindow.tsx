@@ -1,57 +1,75 @@
-import React, { useState} from "react";
-import MessageList from "@/components/chat/fragment/MessageList.tsx";
-import MessageInput from "@/components/chat/fragment/MessageInput.tsx";
-import { MessageProp } from "./chatInterface";
-import { PhoneIcon, PhoneXMarkIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import useVoiceHook from "@/hooks/useVoiceHook.ts"
+import React, { useState } from 'react'
+import MessageList from '@/components/chat/fragment/MessageList.tsx'
+import MessageInput from '@/components/chat/fragment/MessageInput.tsx'
+import { MessageProp } from './chatInterface'
+import {
+  PhoneIcon,
+  PhoneXMarkIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
+import useVoiceHook from '@/hooks/useVoiceHook.ts'
 
 interface ChatWindowProps {
-    chatClose: () => void;
-    messages: MessageProp[];
-    onSendMessage: (text: string) => void;
-    onAttachClick: () => void;
-    onImageUpload: () => void;
-    userCode: string;
-    roomId: string;
+  chatClose: () => void
+  messages: MessageProp[]
+  onSendMessage: (text: string) => void
+  onAttachClick: () => void
+  onImageUpload: () => void
+  roomId: string
 }
 
 const ChatWindow: React.FC<ChatWindowProps> = ({
-                                                   chatClose,
-                                                   messages,
-                                                   onSendMessage,
-                                                   onAttachClick,
-                                                   onImageUpload,
-                                                    userCode,
-                                                    roomId
-                                               }) => {
-    const [voiceState, setVoiceState] = useState(false)
+  chatClose,
+  messages,
+  onSendMessage,
+  onAttachClick,
+  onImageUpload,
+  roomId,
+}) => {
+  const [voiceState, setVoiceState] = useState(false)
 
-    const {startVoice, endVoice} = useVoiceHook(roomId)
+  const { startVoice, endVoice } = useVoiceHook(roomId)
 
-    const handleStartVoice = () => {
-        console.log(roomId)
-        startVoice()
-        setVoiceState(!voiceState);
-    }
+  const handleStartVoice = () => {
+    console.log(roomId)
+    startVoice()
+    setVoiceState(!voiceState)
+  }
 
-    const handleEndVoice = () => {
-        endVoice()
-        setVoiceState(!voiceState);
-    }
+  const handleEndVoice = () => {
+    endVoice()
+    setVoiceState(!voiceState)
+  }
 
+  return (
+    <div className='bg-white w-full max-w-md rounded-lg shadow-lg flex flex-col h-96'>
+      <div className='flex justify-between items-center p-4 border-b'>
+        <h2 className='text-lg font-semibold'>Chat Room</h2>
 
-    return(
-    <div className="bg-white w-full max-w-md rounded-lg shadow-lg flex flex-col h-96">
-        <div className="flex justify-between items-center p-4 border-b">
-            <h2 className="text-lg font-semibold">Chat Room</h2>
+        {voiceState ? (
+          <PhoneXMarkIcon
+            className='size-5 w-auto text-blue-500 ms-5 ps-4'
+            onClick={handleEndVoice}
+          />
+        ) : (
+          <PhoneIcon
+            className='size-5 w-auto text-blue-500 ms-5 ps-4'
+            onClick={handleStartVoice}
+          />
+        )}
+        <XMarkIcon
+          className='size-5 w-auto text-center text-blue-500'
+          onClick={chatClose}
+        />
+      </div>
+      <MessageList messages={messages} roomId={roomId} />
+      <MessageInput
+        onSendMessage={onSendMessage}
+        onAttachClick={onAttachClick}
+        onImageUpload={onImageUpload}
+      />
+    </div>
+  )
+}
 
-                {voiceState ?  <PhoneXMarkIcon className="size-5 w-auto text-blue-500 ms-5 ps-4" onClick={handleEndVoice}/>: <PhoneIcon className="size-5 w-auto text-blue-500 ms-5 ps-4" onClick={handleStartVoice}/>}
-                <XMarkIcon className="size-5 w-auto text-center text-blue-500" onClick={chatClose}/>
-
-        </div>
-        <MessageList messages={messages} userCode={userCode} roomId={roomId} />
-        <MessageInput onSendMessage={onSendMessage} onAttachClick={onAttachClick} onImageUpload={onImageUpload} />
-    </div>)
-};
-
-export default ChatWindow;
+export default ChatWindow

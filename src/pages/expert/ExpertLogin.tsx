@@ -5,7 +5,7 @@ import { axiosLoagin, axiosLogin, axiosPost } from '@/util/axiosData.ts'
 import { migHost } from '@/util/apiInof.ts'
 import { useAuthStore, useLoginAction } from '@/store/useAuthStore.ts'
 import { getCookie } from '@/util/cookie.ts'
-import { useExpertStore } from '@/store/expertStore.ts'
+import { useExpertStore } from '@/store/useExpertStore.ts'
 
 export const ExpertLogin: React.FC = () => {
   const [formData, setFormData] = useState({

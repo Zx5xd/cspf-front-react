@@ -8,15 +8,14 @@ import {
   Row,
 } from 'react-bootstrap'
 import React from 'react'
-import { ExpertPublicFormProp } from '../../../components/user/props/ExpertProps.ts'
-import { useExpertInfo } from '@/store/expertStore.ts'
+import { useExpertInfo } from '@/store/useExpertStore.ts'
+import { ExpertPublicFormProp } from '@/components/user/props/ItemProps.ts'
 
 export const PublicProfile: React.FC<ExpertPublicFormProp> = ({
   handleSetDetailProfile,
 }) => {
   const profile = useExpertInfo()
-  console.log(`profile ${profile}`)
-  const publicProfile = profile.profile
+  const publicProfile = profile?.profile
 
   return (
     <Card>
@@ -86,7 +85,7 @@ export const PublicProfile: React.FC<ExpertPublicFormProp> = ({
                       ? profile.image
                       : `https://bootdey.com/img/Content/avatar/avatar1.png`)
                   }
-                  className='rounded-circle img-responsive mt-2'
+                  className='rounded-circle img-responsive mt-2 ms-5'
                   width='128'
                   height='128'
                 />
@@ -104,7 +103,7 @@ export const PublicProfile: React.FC<ExpertPublicFormProp> = ({
               <p className={'fs-5 pt-5 text-lg-start'}>
                 상세 프로필(경력, 상품 등)
               </p>
-              <footer className='blockquote-footer ms-4 text-lg-start'>
+              <footer className='blockquote-footer pt-2 ms-4 text-lg-start'>
                 정보는 오른쪽 상단 바를 통해 추가해주세요.
               </footer>
             </Col>
@@ -134,7 +133,7 @@ export const PublicProfile: React.FC<ExpertPublicFormProp> = ({
               <p className={'fs-5 pt-5 text-lg-start'}>
                 상세 프로필(회사 정보)
               </p>
-              <footer className='blockquote-footer ms-4 text-lg-start'>
+              <footer className='blockquote-footer pt-2 ms-4 text-lg-start'>
                 정보는 오른쪽 상단 바를 통해 추가해주세요.
               </footer>
             </Col>
