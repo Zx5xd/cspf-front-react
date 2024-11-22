@@ -1,24 +1,29 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import * as path from "node:path";
+import * as path from "path";
+import * as fs from "fs";
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    // proxy: {
-    //   '/searchNews': {
-    //     target: 'http://192.168.219.105:3500',
-    //     changeOrigin: false,
-    //     rewrite: (path) => path.replace(/^\/searchNews/, '/searchNews')
-    //   },
+    // https: {
+    //   key: fs.readFileSync("localhost-key.pem"),
+    //   cert: fs.readFileSync("localhost.pem")
     // },
-
+    proxy: {
+      '/api': {
+        target: 'https://cspf.kro.kr:3000/',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+    },
     host:'0.0.0.0',
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 })

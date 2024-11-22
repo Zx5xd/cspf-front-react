@@ -1,86 +1,96 @@
-// src/App.tsx
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SSOHome from './pages/SSOHome.tsx';
-import EmailBut from "./mainBut.tsx";
-import NaverLoginCallback from './components/SSO/NaverLoginCallback.tsx';
-import {SearchNewsList} from "./components/search/SearchNewsList.tsx";
-import {SearchLawList} from "./components/search/SearchLawList.tsx";
-import {SearchAniInfo} from "./components/search/SearchAniInfo.tsx";
-import Itt from "./components/ITTComponent.tsx";
-import VoiceChat from "./VoiceChat.tsx";
-import GoogleLoginCallback from './components/SSO/GoogleLoginCallback.tsx';
-import { AdminLogin } from './pages/admin/AdminLogin.tsx';
-import { AdminHome } from './pages/admin/AdminHome.tsx';
-import { UserManage } from './pages/admin/UserManage.tsx';
-import { ChatManage } from './pages/admin/ChatManage.tsx';
-import { ExpertManage } from './pages/admin/ExpertManage.tsx';
-import { AnnounceManage } from './pages/admin/AnnounceManage.tsx';
-import { QuestionsManage } from './pages/admin/QuestionsManage.tsx';
-import { ExpertLogin } from './pages/expert/ExpertLogin.tsx';
-import { ExpertSignup } from './pages/expert/ExpertSignup.tsx';
-import { ExpertHome } from './pages/expert/ExpertHome.tsx';
-import { Announcement } from './pages/public/Announcement.tsx';
-import { Questions } from './pages/public/Questions.tsx';
-import { CheckCert } from './pages/admin/CheckCert.tsx';
-import { ExpertMyPage } from './pages/expert/ExpertMyPage.tsx';
-import Email from './email.tsx';
-import {UserLogin} from "./pages/UserLogin.tsx";
-import {Chat} from "./components/chat/Chat.tsx";
-import {ChatComplaint} from "./pages/admin/ChatComplaint.tsx";
+import {Login} from "@/page/Login.tsx";
+import {ThemeProvider} from "@/components/theme-provider.tsx";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import {ChatComponent} from "@/page/chat/Chat.tsx";
+import {UserManager} from "@/page/admin/user/UserManager.tsx";
+import {ExpertManager} from "@/page/admin/expert/ExpertManager.tsx";
+import {BlackListManager} from "@/page/admin/blackList/BlackListManager.tsx";
+import {AnnounceManager} from "@/page/admin/announce/AnnounceManager.tsx";
+import {QuestionManager} from "@/page/admin/question/QuestionManager.tsx";
+import {ChckCertManager} from "@/page/admin/chckCert/ChckCertManager.tsx";
+import {ProfileEdit} from "@/page/admin/user/ProfileEdit.tsx";
+import {AdminLogin} from "@/page/admin/AdminLogin.tsx";
+import {ExpertLogin} from "@/page/expert/ExpertLogin.tsx";
+import {NewsArticleDetail} from "@/page/expert/news/news-article-detail.tsx";
+import {AnnounceDetail} from "@/page/admin/announce/AnnounceDetail.tsx";
+import {QuestionDetail} from "@/page/admin/question/QuestionDetail.tsx";
+import {AnnounceList} from "@/page/expert/announce/AnnounceList.tsx";
+import {QuestionList} from "@/page/expert/question/QuestionList.tsx";
+import {ChatPage} from "@/page/expert/chat.tsx";
+import {AuthWrapper} from "@/auth/AuthWrapper.tsx";
+import {MyPage} from "@/page/expert/mypage/mypage.tsx";
+import {BookingList} from "@/page/expert/booking/BookingList.tsx";
+import {ReqBookingList} from "@/page/expert/booking/ReqBookingList.tsx";
+import {Home} from "@/page/expert/Home.tsx";
+import {ReqLawyerChatList} from "@/page/expert/reqChat/ReqLawyerChatList.tsx";
+import {LawyerChatList} from "@/page/expert/reqChat/LawyerChatList.tsx";
+import {ReqInsurerChatList} from "@/page/expert/reqChat/ReqInsurerChatList.tsx";
+import {InsurerChatList} from "@/page/expert/reqChat/InsurerChatList.tsx";
+import {AnnounceBoardDetail} from "@/page/expert/announce/AnnounceBoardDetail.tsx";
+import {LawReqChatLayout} from "@/layout/LawReqChatLayout.tsx";
+import {NewsList, NewsListLayout} from "@/layout/NewsListLayout.tsx";
+import {PrecedentListLayout} from "@/layout/PrecedentListLayout.tsx";
+import {MypageLayout} from "@/layout/MypageLayout.tsx";
+import {QuestionBoardDetail} from "@/page/expert/question/QuestionBoardDetail.tsx";
+import {InsReqChatLayout} from "@/layout/InsReqChatLayout.tsx";
+import {ReqBookingLayout} from "@/layout/ReqBookingLayout.tsx";
 
-export const AuthWrapper = ({children}:{children:React.Node}) =>{
-    //const  { } = useAuth()
-    //auth check
-    return {children}
+function App() {
+  return (
+    <ThemeProvider defaultTheme="dark">
+
+      <BrowserRouter>
+          <AuthWrapper>
+        <Routes>
+          <Route path="/admin">
+              <Route path="user" element={<UserManager/>}/>
+              <Route path="expert" element={<ExpertManager/>}/>
+              <Route path={"blackList"} element={<BlackListManager/>}/>
+              <Route path={"announce"} element={<AnnounceManager/>}/>
+              <Route path={"anDetail"} element={<AnnounceDetail/>}/>
+              <Route path={"question"} element={<QuestionManager/>}/>
+              <Route path={"quesDetail"} element={<QuestionDetail/>}/>
+              <Route path={"chckCert"} element={<ChckCertManager/>}/>
+              <Route path={"edit"} element={<ProfileEdit/>}/>
+          </Route>
+            <Route path={"/expert"}>
+                <Route path={"home"} element={<Home/>}/>
+                <Route path={"news"} element={<NewsListLayout/>}/>
+                <Route path={"newsDetail"} element={<NewsArticleDetail/>}/>
+                <Route path={"preceList"} element={<PrecedentListLayout/>}/>
+                <Route path={"announce"} element={<AnnounceList/>}/>
+                <Route path={"anDetail"} element={<AnnounceBoardDetail/>}/>
+                <Route path={"quesList"} element={<QuestionList/>}/>
+                <Route path={"quesDetail"} element={<QuestionBoardDetail/>}/>
+                <Route path={"chat"} element={<ChatPage/>}/>
+                <Route path={"mypage"} element={<MypageLayout/>}/>
+
+                {/* 변호사 */}
+                <Route path={"law"} element={<LawReqChatLayout/>}/>
+                <Route path={"reqLawList"} element={<ReqLawyerChatList/>}/>
+                <Route path={"lawList"} element={<LawyerChatList/>}/>
+
+                {/* 수의사 */}
+                <Route path={"vet"} element={<ReqBookingLayout/>}/>
+                <Route path={"reqBooking"} element={<ReqBookingList/>}/>
+                <Route path={"bookingList"} element={<BookingList/>}/>
+
+                {/* 보험사 */}
+                <Route path={'ins'} element={<InsReqChatLayout/>}/>
+                <Route path={"reqInsList"} element={<ReqInsurerChatList/>}/>
+                <Route path={"insList"} element={<InsurerChatList/>}/>
+            </Route>
+
+          <Route path="/chat" element={<ChatComponent/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path={"/login/admin"} element={<AdminLogin/>}/>
+            <Route path={"/login/expert"} element={<ExpertLogin/>}/>
+
+        </Routes>
+          </AuthWrapper>
+      </BrowserRouter>
+    </ThemeProvider>
+  )
 }
 
-const App: React.FC = () => {
-
-    return (
-        <Router>
-
-            <Routes>
-                <Route path="/login">
-                    <Route path="admin" element={<AdminLogin/>}/>
-                    <Route path="expert" element={<ExpertLogin/>}/>
-                    <Route path={"user"} element={<UserLogin/>}/>
-                </Route>
-
-                <Route path="/admin" element={<AdminHome/>}>
-                    <Route path="userManage" element={<UserManage/>}/>
-                    <Route path="expertManage" element={<ExpertManage/>}/>
-                    <Route path="chatManage" element={<ChatManage/>}/>
-                    <Route path="announManage" element={<AnnounceManage/>}/>
-                    <Route path="questionsManage" element={<QuestionsManage/>}/>
-                    <Route path="chckCert" element={<CheckCert/>}/>
-                </Route>
-
-                <Route path="/expert" element={<ExpertHome/>}>
-                    <Route path={"myPage"} element={<ExpertMyPage/>}/>
-                    <Route path={"announcement"} element={<Announcement/>}/>
-                    <Route path={"questions"} element={<Questions/>}/>
-                    {/*News, caseLaw 뼈대 제작 후 재확인*/}
-                    <Route path="searchNews" element={<SearchNewsList/>}/>
-                    <Route path="caseLaw" element={<SearchLawList />} />
-                    <Route path={"signup"} element={<ExpertSignup/>}/>
-                </Route>
-
-                <Route path="/pass" element={<SSOHome />} />
-                <Route path="/auth/google/callback" element={<GoogleLoginCallback />} />
-                <Route path="/auth/naver/callback" element={<NaverLoginCallback />} />
-                <Route path="/check" element={<EmailBut />} />
-                <Route path="/searchNews" element={<SearchNewsList />} />
-                <Route path={"/chatcomp"} element={<ChatComplaint/>}/>
-                {/*<Route path="/voiceChat" element={<VoiceChat />} /> /!* VoiceChat 라우트 추가 *!/*/}
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/caseLaw" element={<SearchLawList />} />
-                <Route path="/aniInfo" element={<SearchAniInfo />} />
-                <Route path="/email" element={<Email />} />
-                <Route path="/itt" element={<Itt />} />
-            </Routes>
-        </Router>
-    );
-};
-
-export default App;
+export default App
