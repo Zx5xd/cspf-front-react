@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     // proxy: {
     //   '/searchNews': {
-    //     target: 'http://192.168.219.105:3500',
+    //     target: 'http://x.x.x.x:3500',
     //     changeOrigin: false,
     //     rewrite: (path) => path.replace(/^\/searchNews/, '/searchNews')
     //   },
